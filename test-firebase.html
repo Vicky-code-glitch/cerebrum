@@ -1,0 +1,44 @@
+<!-- test-firebase.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Test</title>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <div id="status">Testing connection...</div>
+    <button onclick="testAuth()">Test Auth</button>
+    <button onclick="testFirestore()">Test Firestore</button>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        async function testAuth() {
+            try {
+                const user = auth.currentUser;
+                document.getElementById('status').innerHTML = 
+                    user ? `Logged in as: ${user.email}` : 'No user logged in';
+            } catch (error) {
+                document.getElementById('status').innerHTML = `Auth error: ${error.message}`;
+            }
+        }
+        
+        async function testFirestore() {
+            try {
+                await db.collection('test').add({
+                    timestamp: new Date(),
+                    test: 'Firestore is working!'
+                });
+                document.getElementById('status').innerHTML = 'Firestore write successful!';
+            } catch (error) {
+                document.getElementById('status').innerHTML = `Firestore error: ${error.message}`;
+            }
+        }
+        
+        // Initial test
+        testAuth();
+    </script>
+</body>
+</html>

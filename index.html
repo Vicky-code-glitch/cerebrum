@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner">
+            <i class="fas fa-brain"></i>
+            <p>Loading Quiz Application...</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="main-container" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>Quiz Application</h1>
+            </div>
+            <nav class="nav" id="main-nav">
+                <button id="home-btn" class="nav-btn">
+                    <i class="fas fa-home"></i> Home
+                </button>
+                <button id="dashboard-btn" class="nav-btn">
+                    <i class="fas fa-chart-bar"></i> Dashboard
+                </button>
+                <button id="leaderboard-btn" class="nav-btn">
+                    <i class="fas fa-trophy"></i> Leaderboard
+                </button>
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <button id="user-btn" class="nav-btn">
+                        <i class="fas fa-user"></i> <span id="user-name-display">Guest</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <button id="profile-btn"><i class="fas fa-user-circle"></i> Profile</button>
+                        <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Auth Section -->
+            <section id="auth-section" class="page active">
+                <div class="auth-container">
+                    <div class="auth-card" id="login-card">
+                        <div class="auth-header">
+                            <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
+                            <p>Login to continue your quiz journey</p>
+                        </div>
+                        
+                        <div class="auth-form">
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="login-email" placeholder="Email Address" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="login-password" placeholder="Password" required>
+                                <button class="toggle-password" type="button">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div id="login-error" class="error-message"></div>
+                            <button id="login-btn" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                            
+                            <div class="auth-divider">
+                                <span>OR</span>
+                            </div>
+                            
+                            <button id="google-login-btn" class="btn btn-google">
+                                <i class="fab fa-google"></i> Sign in with Google
+                            </button>
+                            
+                            <p class="auth-switch">
+                                Don't have an account? 
+                                <button id="show-register-btn" class="auth-link">Sign up here</button>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-card" id="register-card" style="display: none;">
+                        <div class="auth-header">
+                            <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+                            <p>Join Now to start taking quiz.</p>
+                        </div>
+                        
+                        <div class="auth-form">
+                            <div class="input-group">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="register-name" placeholder="Full Name" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="register-email" placeholder="Email Address" required>
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="register-password" placeholder="Password (min. 6 characters)" required>
+                                <button class="toggle-password" type="button">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="register-confirm-password" placeholder="Confirm Password" required>
+                                <button class="toggle-password" type="button">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div id="register-error" class="error-message"></div>
+                            <button id="register-btn" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Create Account
+                            </button>
+                            
+                            <p class="auth-switch">
+                                Already have an account? 
+                                <button id="show-login-btn" class="auth-link">Login here</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Home Section -->
+            <section id="home-section" class="page">
+                <div class="welcome-card">
+                    <div class="welcome-header">
+                        <h2><i class="fas fa-home"></i> Welcome, <span id="user-greeting">Guest</span>!</h2>
+                        <p>Test your knowledge with our interactive quizzes</p>
+                    </div>
+                    
+                    <div class="stats-cards" id="home-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-question-circle"></i>
+                            <h3 id="total-questions"></h3>
+                            <p>Questions Available</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <h3 id="total-players">0</h3>
+                            <p>Active Players</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-star"></i>
+                            <h3 id="user-best-score">0%</h3>
+                            <p>Your Best Score</p>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-setup">
+                        <h3><i class="fas fa-cogs"></i> Quiz Settings</h3>
+                        
+                        <div class="category-selection">
+                            <h4><i class="fas fa-list"></i> Select Category</h4>
+                            <div class="category-grid" id="category-grid">
+                                <!-- Categories loaded from API -->
+                            </div>
+                        </div>
+                        
+                        <div class="difficulty-selection">
+                            <h4><i class="fas fa-chart-line"></i> Select Difficulty</h4>
+                            <div class="difficulty-options">
+                                <button class="difficulty-btn active" data-difficulty="easy">
+                                    <i class="fas fa-seedling"></i> Easy
+                                </button>
+                                <button class="difficulty-btn" data-difficulty="medium">
+                                    <i class="fas fa-mountain"></i> Medium
+                                </button>
+                                <button class="difficulty-btn" data-difficulty="hard">
+                                    <i class="fas fa-mountain"></i> Hard
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-count">
+                            <h4><i class="fas fa-question"></i> Number of Questions</h4>
+                            <div class="count-selector">
+                                <button class="count-btn" data-count="5">5</button>
+                                <button class="count-btn active" data-count="10">10</button>
+                                <button class="count-btn" data-count="15">15</button>
+                                <button class="count-btn" data-count="20">20</button>
+                            </div>
+                        </div>
+                        
+                        <button id="start-quiz-btn" class="btn btn-primary btn-large">
+                            <i class="fas fa-play-circle"></i> Start Quiz
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz-section" class="page">
+                <div class="quiz-header">
+                    <div class="quiz-info">
+                        <h3 id="quiz-category">General Knowledge</h3>
+                        <p id="quiz-difficulty">Medium</p>
+                    </div>
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p>Question <span id="current-question-num">1</span> of <span id="total-questions-num">10</span></p>
+                    </div>
+                    <div class="quiz-timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="quiz-timer">30</span>s
+                    </div>
+                </div>
+                
+                <div class="question-container">
+                    <h2 id="question-text">Loading question...</h2>
+                    <div class="options-container" id="options-container">
+                        <!-- Options loaded dynamically -->
+                    </div>
+                </div>
+                
+                <div class="quiz-navigation">
+                    <button id="prev-question-btn" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button id="next-question-btn" class="btn btn-primary">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button id="submit-quiz-btn" class="btn btn-success" style="display: none;">
+                        <i class="fas fa-paper-plane"></i> Submit Quiz
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" class="page">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h2><i class="fas fa-chart-bar"></i> Quiz Results</h2>
+                        <div class="score-circle">
+                            <svg width="120" height="120">
+                                <circle class="circle-bg" cx="60" cy="60" r="54"></circle>
+                                <circle class="circle-progress" cx="60" cy="60" r="54"></circle>
+                                <text x="60" y="65" text-anchor="middle" class="score-text" id="final-score-text">0</text>
+                            </svg>
+                            <div class="score-label">Score</div>
+                        </div>
+                        <p id="results-message" class="results-message">Great job! You did well!</p>
+                    </div>
+                    
+                    <div class="results-details">
+                        <div class="detail-row">
+                            <span><i class="fas fa-check-circle"></i> Correct Answers</span>
+                            <span id="correct-answers">0</span>
+                        </div>
+                        <div class="detail-row">
+                            <span><i class="fas fa-question-circle"></i> Total Questions</span>
+                            <span id="total-questions-result">0</span>
+                        </div>
+                        <div class="detail-row">
+                            <span><i class="fas fa-clock"></i> Time Taken</span>
+                            <span id="time-taken">0s</span>
+                        </div>
+                        <div class="detail-row">
+                            <span><i class="fas fa-chart-line"></i> Difficulty</span>
+                            <span id="result-difficulty">Medium</span>
+                        </div>
+                        <div class="detail-row">
+                            <span><i class="fas fa-folder"></i> Category</span>
+                            <span id="result-category">General Knowledge</span>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button id="review-quiz-btn" class="btn btn-secondary">
+                            <i class="fas fa-list"></i> Review Answers
+                        </button>
+                        <button id="new-quiz-btn" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> New Quiz
+                        </button>
+                        <button id="share-results-btn" class="btn btn-success">
+                            <i class="fas fa-share-alt"></i> Share Results
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="review-container" id="review-container" style="display: none;">
+                    <h3><i class="fas fa-list-ol"></i> Answer Review</h3>
+                    <div id="answers-review">
+                        <!-- Answers review loaded dynamically -->
+                    </div>
+                    <button id="back-to-results-btn" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Results
+                    </button>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="page">
+                <div class="dashboard-header">
+                    <h2><i class="fas fa-chart-bar"></i> Your Dashboard</h2>
+                    <p>Track your progress and performance</p>
+                </div>
+                
+                <div class="user-stats" id="dashboard-stats">
+                    <!-- Stats loaded dynamically -->
+                </div>
+                
+                <div class="recent-quizzes">
+                    <h3><i class="fas fa-history"></i> Recent Quizzes</h3>
+                    <div id="quiz-history">
+                        <!-- Quiz history loaded dynamically -->
+                    </div>
+                </div>
+                
+                <div class="performance-chart">
+                    <h3><i class="fas fa-chart-line"></i> Performance Trend</h3>
+                    <canvas id="performance-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Leaderboard Section -->
+            <section id="leaderboard-section" class="page">
+                <div class="leaderboard-header">
+                    <h2><i class="fas fa-trophy"></i> Global Leaderboard</h2>
+                    <div class="leaderboard-filters">
+                        <button class="filter-btn active" data-filter="all">All Time</button>
+                        <button class="filter-btn" data-filter="month">This Month</button>
+                        <button class="filter-btn" data-filter="week">This Week</button>
+                        <button class="filter-btn" data-filter="today">Today</button>
+                    </div>
+                </div>
+                
+                <div class="leaderboard-cards">
+                    <div class="top-three">
+                        <div class="top-card second">
+                            <div class="rank">2</div>
+                            <div class="player-info">
+                                <h4>Player 2</h4>
+                                <p>Score: 0</p>
+                            </div>
+                        </div>
+                        <div class="top-card first">
+                            <div class="rank">1</div>
+                            <div class="player-info">
+                                <h4>Player 1</h4>
+                                <p>Score: 0</p>
+                            </div>
+                        </div>
+                        <div class="top-card third">
+                            <div class="rank">3</div>
+                            <div class="player-info">
+                                <h4>Player 3</h4>
+                                <p>Score: 0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="leaderboard-list">
+                        <h3><i class="fas fa-list-ol"></i> Top Players</h3>
+                        <div id="leaderboard-entries">
+                            <!-- Leaderboard entries loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Quiz Application &copy; 2025 | Built with Firebase & Open Trivia DB</p>
+            <div class="footer-links">
+                <a href="https://github.com/vicky-code-glitch/" id="github-link"><i class="fab fa-github"></i> GitHub</a>
+                <a href="mailto:omeifevictor001@gmail.com" id="contact-link"><i class="fas fa-envelope"></i> Contact</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!-- App Scripts -->
+    <script type="module" src="app.js"></script>
+
+</body>
+</html>
