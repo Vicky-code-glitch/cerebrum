@@ -46,7 +46,7 @@ const startTimer = () => {
 // Save quiz results to Firestore
 const saveQuizResults = async (score, correctCount, timeTaken) => {
     try {
-        console.log("💾 Saving quiz results...");
+        console.log("Saving quiz results...");
         
         const quizData = {
             userId: AppState.currentUser.uid,
@@ -100,7 +100,7 @@ const saveQuizResults = async (score, correctCount, timeTaken) => {
 };
 
 export const submitQuiz = () => {
-    console.log("📤 Submitting quiz...");
+    console.log("Submitting quiz...");
     
     if (AppState.currentQuiz.timer) {
         clearInterval(AppState.currentQuiz.timer);
@@ -117,7 +117,7 @@ export const submitQuiz = () => {
     const score = Math.round((correctCount / AppState.currentQuiz.questions.length) * 100);
     const timeTaken = Math.floor((Date.now() - AppState.currentQuiz.startTime) / 1000);
     
-    console.log(`📊 Quiz Results: ${correctCount}/${AppState.currentQuiz.questions.length} (${score}%) in ${timeTaken}s`);
+    console.log(`Quiz Results: ${correctCount}/${AppState.currentQuiz.questions.length} (${score}%) in ${timeTaken}s`);
     
     // Update results UI
     Elements.finalScoreText.textContent = score;
@@ -137,24 +137,75 @@ export const submitQuiz = () => {
     
     // Set results message
     let message = '';
-    let emoji = '';
+    let iconSvg = '';
     
+    // Using inline SVG paths
     if (score >= 90) {
         message = 'Outstanding! You\'re a quiz master!';
-        emoji = '🏆';
-    } else if (score >= 70) {
+        iconSvg = `<svg class="icon trophy" viewBox="0 0 24 24" fill="currentColor"><path d="M21 4h-3V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v1H3a1 1 0 0 0-1 1v3a3 3 0 0 0 3 3h1.1A6 6 0 0 0 11 14.9V19H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2h-2v-4.1A6 6 0 0 0 18.9 11H19a3 3 0 0 0 3-3V5a1 1 0 0 0-1-1z"/></svg>`;
+    } else if (score >=70) {
         message = 'Excellent! Great job!';
-        emoji = '👍';
+        iconSvg = `<svg class="icon thumbs-up" viewBox="0 0 24 24" fill="currentColor"><path d="M23 10a2 2 0 0 0-2-2h-6.32l.54-2.2.03-.22a2 2 0 0 0-2-2.58l-8 1.6A2 2 0 0 0 3 7v8a2 2 0 0 0 1.34 1.87l8 2.68A2 2 0 0 0 15 19l3 3h3a2 2 0 0 0 2-2z"/></svg>`;
     } else if (score >= 50) {
         message = 'Good effort! Keep practicing!';
-        emoji = '💪';
+        iconSvg = `<svg class="icon strength" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V7z"/><path d="M13 5v2h2V5zM9 19v-2h6v2z"/></svg>`;
     } else {
         message = 'Keep learning! You\'ll do better next time!';
-        emoji = '📚';
+        iconSvg = `<svg class="icon book" viewBox="0 0 24 24" fill="currentColor"><path d="M21 18H6a1 1 0 0 0 0 2h15v2H6a3 3 0 0 1-3-3V4a2 2 0 0 1 2-2h16v16zM5 16.05c.162-.033.329-.05.5-.05H19V4H5v12.05zM16 9H8V7h8v2z"/></svg>`;
+    }
+
+    // Clear and set results message with icon
+    Elements.resultsMessage.innerHTML = '';
+    
+    // Create message container
+    const messageContainer = document.createElement('div');
+    messageContainer.className = 'result-message-container';
+    messageContainer.style.display = 'flex';
+    messageContainer.style.alignItems = 'center';
+    messageContainer.style.justifyContent = 'center';
+    messageContainer.style.flexWrap = 'wrap';
+    messageContainer.style.gap = '8px';
+    
+    // Create text node
+    const textSpan = document.createElement('span');
+    textSpan.className = 'result-text';
+    textSpan.textContent = message;
+    textSpan.style.fontSize = '1.2rem';
+    textSpan.style.fontWeight = '600';
+    
+    // Create icon container
+    const iconContainer = document.createElement('span');
+    iconContainer.className = 'result-icon';
+    iconContainer.style.display = 'inline-flex';
+    iconContainer.style.alignItems = 'center';
+    iconContainer.style.justifyContent = 'center';
+    iconContainer.innerHTML = iconSvg;
+    
+    // Apply icon styling based on score
+    const icon = iconContainer.querySelector('.icon');
+    if (icon) {
+        icon.style.width = '24px';
+        icon.style.height = '24px';
+        icon.style.verticalAlign = 'middle';
+        icon.style.marginLeft = '8px';
+        
+        // Add color classes for CSS styling
+        if (icon.classList.contains('trophy')) {
+            icon.style.color = '#FFD700'; // Gold for trophy
+        } else if (icon.classList.contains('thumbs-up')) {
+            icon.style.color = '#4CAF50'; // Green for thumbs up
+        } else if (icon.classList.contains('strength')) {
+            icon.style.color = '#2196F3'; // Blue for strength
+        } else if (icon.classList.contains('book')) {
+            icon.style.color = '#9C27B0'; // Purple for book
+        }
     }
     
-    Elements.resultsMessage.textContent = `${message} ${emoji}`;
-    
+    // Append text and icon
+    messageContainer.appendChild(textSpan);
+    messageContainer.appendChild(iconContainer);
+    Elements.resultsMessage.appendChild(messageContainer);
+
     // Save results to Firestore if user is logged in
     if (AppState.currentUser) {
         saveQuizResults(score, correctCount, timeTaken);

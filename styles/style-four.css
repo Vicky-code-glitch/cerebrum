@@ -212,3 +212,45 @@
     box-shadow: var(--shadow);
 }
 
+/* Add to style-four.css - Icon styling */
+.result-message-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    text-align: center;
+}
+
+.result-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.result-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+.icon.trophy {
+    color: #FFD700;
+}
+
+.icon.thumbs-up {
+    color: #4CAF50;
+}
+
+.icon.strength {
+    color: #2196F3;
+}
+
+.icon.book {
+    color: #9C27B0;
+}
