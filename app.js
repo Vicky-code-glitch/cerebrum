@@ -126,4 +126,4 @@ const loadCategories = () => {
     console.log(`Loaded ${categories.length} categories`);
 };
 
-console.log("Quiz APplication is ready!");
+console.log("Quiz Application is ready!");
