@@ -16,7 +16,7 @@ const showError = (element, message) => {
     }, 5000);
 };
 
-// Auth form toggling
+// Auth form togglingl;
 export const showRegisterForm = () => {
     Elements.loginCard.style.display = 'none';
     Elements.registerCard.style.display = 'block';
@@ -150,7 +150,7 @@ export const registerUser = () => {
             Elements.registerConfirmPassword.value = '';
             
             // Show success message
-            showToast('Account created successfully! Welcome to QuizMaster Pro!', 'success');
+            showToast('Account created successfully! Welcome to Cerebrum!', 'success');
             
             // Switch to login form
             showLoginForm();

@@ -336,7 +336,7 @@ export const showReview = () => {
 export const shareResults = () => {
     const score = Elements.finalScoreText.textContent;
     const category = Elements.resultCategory.textContent;
-    const message = `I scored ${score}% on ${category} quiz in QuizMaster Pro! Can you beat my score? 🧠`;
+    const message = `I scored ${score}% on ${category} quiz in Cerebrum - Interactive Quiz Application! Can you beat my score? 🧠`;
     
     if (navigator.share) {
         navigator.share({

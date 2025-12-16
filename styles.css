@@ -1,5 +1,6 @@
-@import url('./style-one.css');
-@import url('./style-two.css');
-@import url('./style-three.css');
-@import url('./style-four.css');
-@import url('./responsive.css');
+@import url('./styles/style-one.css');
+@import url('./styles/style-two.css');
+@import url('./styles/style-three.css');
+@import url('./styles/style-four.css');
+@import url('./styles/responsive.css');
+

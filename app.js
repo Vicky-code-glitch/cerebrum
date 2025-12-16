@@ -63,7 +63,7 @@ const checkAuthState = () => {
             navigateTo('home');
             
             // Show welcome toast
-            showToast(`Welcome back, ${user.displayName || 'QuizMaster'}!`, 'success');
+            showToast(`Welcome back, ${user.displayName || 'Cerebrum'}!`, 'success');
         } else {
             // User is signed out
             console.log("No user signed in");
