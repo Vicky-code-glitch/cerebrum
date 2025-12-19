@@ -101,7 +101,7 @@ export const setupEventListeners = () => {
     // Footer links
     document.getElementById('github-link').addEventListener('click', (e) => {
         e.preventDefault();
-        window.open('https://github.com', '_blank');
+        window.open('https://github.com/Vicky-code-glitch/cerebrum', '_blank');
     });
     
     console.log("Event listeners set up!");
