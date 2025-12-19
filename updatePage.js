@@ -144,13 +144,10 @@ export const updateDashboard = async () => {
 
 // Load leaderboard
 export const loadLeaderboard = async (filter) => {
-    console.log(`🏆 Loading leaderboard: ${filter}`);
+    console.log(`Loading leaderboard: ${filter}`);
     
     try {
         let query = db.collection('leaderboard').orderBy('bestScore', 'desc').limit(20);
-        
-        // For demo purposes, we'll show all entries regardless of filter
-        // In a real app, you'd filter by date here
         
         const snapshot = await query.get();
         
@@ -224,8 +221,8 @@ export const updateLeaderboard = async (score) => {
             });
         }
         
-        console.log("✅ Leaderboard updated");
+        console.log("Leaderboard updated");
     } catch (error) {
-        console.error("❌ Error updating leaderboard:", error);
+        console.error("Error updating leaderboard:", error);
     }
 };
